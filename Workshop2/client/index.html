@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Week 1 - Consume API</title>
+  <script>
+    const completed = (e) => {
+      const data = JSON.parse(e.target.responseText);
+      const selectedOption = document.getElementById('tipoCambioSelect').value;
+
+ 
+      switch (selectedOption) {
+        case 'TipoCompraDolares':
+          document.getElementById('result').innerHTML = `Compra de Dólares: ${data.TipoCompraDolares}`;
+          break;
+        case 'TipoVentaDolares':
+          document.getElementById('result').innerHTML = `Venta de Dólares: ${data.TipoVentaDolares}`;
+          break;
+        case 'TipoCompraEuros':
+          document.getElementById('result').innerHTML = `Compra de Euros: ${data.TipoCompraEuros}`;
+          break;
+        case 'TipoVentaEuros':
+          document.getElementById('result').innerHTML = `Venta de Euros: ${data.TipoVentaEuros}`;
+          break;
+        default:
+          document.getElementById('result').innerHTML = 'Selecciona una opción válida';
+      }
+    };
+
+    const error = () => console.log(this.responseText);
+
+    function getTipoCambio() {
+      const ajaxRequest = new XMLHttpRequest();
+      ajaxRequest.addEventListener("load", completed);
+      ajaxRequest.addEventListener("error", error);
+      ajaxRequest.open("GET", "http://localhost:3000/api/tipocambio"); // Cambia la URL aquí
+      ajaxRequest.send();
+    }
+  </script>
+</head>
+
+<body>
+  <h1>Seleccione un tipo de cambio</h1>
+
+
+  <select id="tipoCambioSelect">
+    <option value="">Selecciona una opción</option>
+    <option value="TipoCompraDolares">Compra de Dólares</option>
+    <option value="TipoVentaDolares">Venta de Dólares</option>
+    <option value="TipoCompraEuros">Compra de Euros</option>
+    <option value="TipoVentaEuros">Venta de Euros</option>
+  </select>
+
+  
+  <button onclick="getTipoCambio();">Obtener Tipo de Cambio</button>
+
+  
+  <h3>Resultado:</h3>
+  <div id="result"></div>
+</body>
+
+</html>
