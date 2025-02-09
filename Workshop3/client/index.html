@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gestión de Profesores</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    h1 {
+      color: #333;
+    }
+    form {
+      margin-bottom: 20px;
+    }
+    input {
+      padding: 8px;
+      margin-right: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    button {
+      padding: 8px 16px;
+      background-color: #28a745;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #218838;
+    }
+    ul {
+      list-style-type: none;
+      padding: 0;
+    }
+    li {
+      padding: 10px;
+      border: 1px solid #ddd;
+      margin-bottom: 5px;
+      border-radius: 4px;
+      background-color: #f9f9f9;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .delete-btn {
+      background-color: #dc3545;
+    }
+    .delete-btn:hover {
+      background-color: #c82333;
+    }
+  </style>
+</head>
+<body>
+  <h1>Gestión de Profesores</h1>
+
+  <!-- Formulario para crear un profesor -->
+  <form id="createTeacherForm">
+    <h2>Crear Profesor</h2>
+    <input type="text" id="name" placeholder="Nombre" required>
+    <input type="text" id="subject" placeholder="Asignatura" required>
+    <button type="submit">Crear</button>
+  </form>
+
+  <!-- Lista de profesores -->
+  <h2>Lista de Profesores</h2>
+  <ul id="teacherList"></ul>
+
+  <script>
+    // URL de la API
+    const API_URL = 'http://localhost:3000/api/teachers';
+
+    // Función para obtener y mostrar la lista de profesores
+    async function fetchTeachers() {
+      try {
+        const response = await fetch(API_URL);
+        const teachers = await response.json();
+        const teacherList = document.getElementById('teacherList');
+        teacherList.innerHTML = ''; // Limpiar la lista antes de agregar los nuevos elementos
+
+        teachers.forEach(teacher => {
+          const li = document.createElement('li');
+          li.innerHTML = `
+            <span>${teacher.name} - ${teacher.subject}</span>
+            <button class="delete-btn" data-id="${teacher._id}">Eliminar</button>
+          `;
+          teacherList.appendChild(li);
+        });
+
+        // Agregar eventos a los botones de eliminar
+        document.querySelectorAll('.delete-btn').forEach(button => {
+          button.addEventListener('click', deleteTeacher);
+        });
+      } catch (error) {
+        console.error('Error al obtener la lista de profesores:', error);
+      }
+    }
+
+    // Función para crear un profesor
+    async function createTeacher(name, subject) {
+      try {
+        const response = await fetch(API_URL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ name, subject }),
+        });
+
+        if (response.ok) {
+          alert('Profesor creado exitosamente');
+          fetchTeachers(); // Actualizar la lista de profesores
+        } else {
+          console.error('Error al crear el profesor:', response.statusText);
+        }
+      } catch (error) {
+        console.error('Error al crear el profesor:', error);
+      }
+    }
+
+    // Función para eliminar un profesor
+    async function deleteTeacher(event) {
+      const teacherId = event.target.getAttribute('data-id');
+      try {
+        const response = await fetch(`${API_URL}?id=${teacherId}`, {
+          method: 'DELETE',
+        });
+
+        if (response.ok) {
+          alert('Profesor eliminado exitosamente');
+          fetchTeachers(); // Actualizar la lista de profesores
+        } else {
+          console.error('Error al eliminar el profesor:', response.statusText);
+        }
+      } catch (error) {
+        console.error('Error al eliminar el profesor:', error);
+      }
+    }
+
+    // Manejar el envío del formulario
+    document.getElementById('createTeacherForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const name = document.getElementById('name').value;
+      const subject = document.getElementById('subject').value;
+      createTeacher(name, subject);
+    });
+
+    // Cargar la lista de profesores al cargar la página
+    window.onload = fetchTeachers;
+  </script>
+</body>
+</html>
