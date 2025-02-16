@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gestión Académica</title>
+  <style>
+    /* General body styles */
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f7fa;
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    /* Main container */
+    .container {
+      width: 90%;
+      max-width: 1200px;
+      margin: 20px auto;
+      padding: 20px;
+      background-color: #ffffff;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+    }
+
+    /* Heading styles */
+    h1 {
+      color: #333;
+      font-size: 32px;
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    /* Button styles */
+    button {
+      background-color: #007bff;
+      color: white;
+      font-size: 16px;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin: 10px;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    /* Button container for alignment */
+    .button-container {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    /* iframe styles */
+    iframe {
+      width: 100%;
+      height: 600px;
+      border: none;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Responsive iframe */
+    @media (max-width: 768px) {
+      iframe {
+        height: 400px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1>Gestión Académica</h1>
+
+    <!-- Buttons for navigation -->
+    <div class="button-container">
+      <button onclick="loadTeachers()">Gestión de Profesores</button>
+      <button onclick="loadAddCourse()">Agregar Curso</button>
+    </div>
+
+    <!-- Content loaded dynamically into the iframe -->
+    <iframe id="contentFrame" src="../client/teacherManagement.html"></iframe>
+  </div>
+
+  <script>
+    function loadTeachers() {
+      document.getElementById('contentFrame').src = 'teacherManagement.html';
+    }
+
+    function loadAddCourse() {
+      document.getElementById('contentFrame').src = 'addCourse.html';
+    }
+
+   
+  </script>
+</body>
+
+</html>
